@@ -8,11 +8,13 @@ import HelloWorld from './components/HelloWorld.vue'
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <h1>App Movies</h1>
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/films">Films</RouterLink>
+        <RouterLink to="/acteurs">Acteurs</RouterLink>
+        <RouterLink to="/categories">Categories</RouterLink>
       </nav>
     </div>
   </header>
@@ -21,6 +23,11 @@ import HelloWorld from './components/HelloWorld.vue'
 </template>
 
 <style scoped>
+h1 {
+    font-weight: 500;
+    font-size: 2.6rem;
+    position: relative;
+}
 header {
   line-height: 1.5;
   max-height: 100vh;
