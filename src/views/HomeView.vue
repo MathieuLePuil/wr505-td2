@@ -8,9 +8,14 @@ const router = useRouter()
 const data = ref([]);
 const dataActors = ref([]);
 
-const redirectToPays = (movie) => {
+const redirectToMovie = (movie) => {
     const id = movie['@id'].split('/').pop();
     router.push({ name: 'moviesPage', params: { id } })
+}
+
+const redirectToActor = (actor) => {
+    const id = actor['@id'].split('/').pop();
+    router.push({ name: 'actorsPage', params: { id } })
 }
 
 onMounted(async () => {
@@ -28,14 +33,16 @@ onMounted(async () => {
 <template>
     <main>
         <div v-for="movie in data">
-            <div @click="redirectToPays(movie)" style="border: 1px black solid; padding: 10px; margin-bottom: 10px">
+            <div @click="redirectToMovie(movie)" style="border: 1px black solid; padding: 10px; margin-bottom: 10px">
                 <h2>{{ movie.title }}</h2>
                 <p>{{ movie.description }}</p>
             </div>
         </div>
         <br>
-        <div v-for="actor in dataActors" style="border: 1px black solid; padding: 10px; margin-bottom: 10px;">
-            <h2>{{ actor.firstName }}</h2>
+        <div v-for="actor in dataActors">
+            <div @click="redirectToActor(actor)" style="border: 1px black solid; padding: 10px; margin-bottom: 10px">
+                <h2>{{ actor.firstName }}</h2>
+            </div>
         </div>
     </main>
 </template>
