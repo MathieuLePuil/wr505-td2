@@ -15,6 +15,12 @@ const router = createRouter({
       component: () => import('../views/MoviesView.vue')
     },
     {
+      path: '/movies/:id',
+      name: 'moviesPage',
+      component: () => import('../views/MoviesPageView.vue'),
+      props: true
+    },
+    {
       path: '/actors',
       name: 'actors',
       component: () => import('../views/ActorsView.vue')
@@ -23,7 +29,7 @@ const router = createRouter({
       path: '/categories',
       name: 'categories',
         component: () => import('../views/CategoriesView.vue')
-    }
+    },
   ]
 })
 
