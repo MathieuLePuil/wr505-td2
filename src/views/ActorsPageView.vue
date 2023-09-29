@@ -11,6 +11,11 @@ onMounted(async () => {
     const response = await axios.get('http://127.0.0.1:8000/api/actors/' + id)
     data.value = response.data;
 
+    if (data.value.nationality) {
+        const nationalityResponse = await axios.get('http://127.0.0.1:8000' + data.value.nationality);
+        data.value.nationality = nationalityResponse.data.nationality;
+    }
+
     if (data.value.movies && Array.isArray(data.value.movies)) {
         const moviePromises = data.value.movies.map(movieURL => axios.get('http://127.0.0.1:8000' + movieURL));
         const movieResponses = await Promise.all(moviePromises);
@@ -25,6 +30,7 @@ onMounted(async () => {
         <br>
         <h2>{{ data.firstName }}</h2>
         <p>{{ data.lastName }}</p>
+        <p>{{ data.nationality }}</p>
         <ul v-for="movie in data.movieNames">
             <li>{{ movie }}</li>
         </ul>
