@@ -1,91 +1,70 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-</script>
+import {RouterLink, RouterView} from 'vue-router'
+import {ref, computed} from 'vue';
 
+const userToken = ref(localStorage.getItem('user-token'));
+
+const isLoggedIn = computed(() => {
+  return userToken.value != null;
+});
+
+const logout = () => {
+  localStorage.removeItem('user-token');
+  location.reload();
+};
+</script>
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <h1>App Movies</h1>
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/movies">Films</RouterLink>
-        <RouterLink to="/actors">Acteurs</RouterLink>
-        <RouterLink to="/categories">Categories</RouterLink>
-      </nav>
+    <div class="">
+      <div>
+        <h1>MoviesList</h1>
+        <em>Liste de films
+        </em>
+      </div>
     </div>
   </header>
 
-  <RouterView />
+  <aside class="">
+    <nav>
+      <ul v-if="isLoggedIn">
+        <li>
+          <RouterLink to="/">
+            Home
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/movies">
+            Movies
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/acteurs">
+            Actors
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/categories">
+            Categories
+          </RouterLink>
+        </li>
+        <li @click="logout">
+          Logout
+        </li>
+      </ul>
+      <ul v-else>
+        <li>
+          <RouterLink to="/login">
+            Login
+          </RouterLink>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <RouterView/>
+
 </template>
 
 <style scoped>
-h1 {
-    font-weight: 500;
-    font-size: 2.6rem;
-    position: relative;
-}
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
 </style>
