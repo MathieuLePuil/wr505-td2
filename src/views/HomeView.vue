@@ -19,7 +19,7 @@ const redirectToActor = (actor) => {
 }
 
 onMounted(async () => {
-    const response = await axios.get('http://127.0.0.1:8000/api/movies');
+    const response = await axios.get('http://127.0.0.1:8000/api/movies?online=1');
     const movies = response.data['hydra:member'];
     data.value = movies.slice(-4).reverse();
 
