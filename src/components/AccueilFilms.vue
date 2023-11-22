@@ -42,10 +42,10 @@ onMounted(async () => {
 
 <template>
   <section>
+      <h1 class="text-3xl px-10 my-10 font-semibold">Selection of movies</h1>
     <article>
-      <h2>Films à la Une</h2>
-      <div class="">
-        <div v-for="film in films.slice(0,4)" :key="film.id" class="">
+      <div class="flex px-10 flex-wrap mt-5">
+        <div v-for="film in films.slice(0,6)" :key="film.id" class="w-1/3 px-3 mb-5">
           <card-film :film="film"/>
         </div>
       </div>
@@ -53,10 +53,10 @@ onMounted(async () => {
   </section>
 
   <section>
+      <h1 class="text-3xl px-10 my-10 font-semibold">Selection of actors</h1>
     <article>
-      <h2>4 acteurs (API)</h2>
-      <div class="">
-        <div v-for="acteur in acteurs.slice(0,4)" :key="acteur.id">
+      <div class="flex px-10 flex-wrap mt-5">
+        <div v-for="acteur in acteurs.slice(0,6)" :key="acteur.id" class="w-1/3 px-3 mb-5">
           <card-acteur :acteur="acteur"/>
         </div>
       </div>
