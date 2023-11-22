@@ -56,7 +56,7 @@ onMounted(async () => {
       <h1 class="text-3xl px-10 my-10 font-semibold">Selection of actors</h1>
     <article>
       <div class="flex px-10 flex-wrap mt-5">
-        <div v-for="acteur in acteurs.slice(0,6)" :key="acteur.id" class="w-1/3 px-3 mb-5">
+        <div v-for="acteur in acteurs.slice(0,6)" :key="acteur.id" class="px-3 mb-5">
           <card-acteur :acteur="acteur"/>
         </div>
       </div>
