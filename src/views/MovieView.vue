@@ -6,7 +6,6 @@
             <div class="flex px-10 flex-wrap mt-5">
                 <div v-for="movie in movies" :key="movie.id" class="flex flex-col items-center w-1/3 px-3 mb-5">
                     <card-film :film="movie"/>
-                    <a @click="toggleDetails(movie.id)" class="cursor-pointer">Edit</a>
                 </div>
             </div>
         </article>
