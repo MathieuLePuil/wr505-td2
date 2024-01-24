@@ -9,24 +9,25 @@
                 </div>
             </div>
         </article>
-    </section>
-    <div :class="[{ 'modal': selectedMovieId, 'scale-0': !selectedMovieId }]">
-        <div class="modal-content" v-if="selectedMovie">
-            <h2 class="text-xl font-bold mb-2">{{ selectedMovie.title }}</h2>
-            <form @submit.prevent="updateMovieTitle">
-                <div class="flex flex-col">
-                    <label for="editMovieTitle">Titre du film :</label>
-                    <input
-                        type="text"
-                        class="border border-gray-300 p-2 rounded-md mb-2"
-                        id="editMovieTitle"
-                        v-model="editedMovieTitle"
-                    />
+        <div class="bg-gradient-to-r flex items-center justify-center">
+            <div class="max-w-full md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto bg-white p-6 rounded-lg">
+                <div class="flex justify-center">
+                    <nav class="flex space-x-2" aria-label="Pagination">
+                        <button @click="previousPage" :disabled="currentPage === 1" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
+                            Previous
+                        </button>
+                        <span v-for="page in 3" :key="page" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border hover:bg-gray-300 cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10"
+                              :class="{ '!bg-gray-300': currentPage === page }" @click="goToPage(page)">
+                            {{ page }}
+                        </span>
+                        <button @click="nextPage" :disabled="currentPage === 3" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
+                            Next
+                        </button>
+                    </nav>
                 </div>
-                <button type="submit" class="bg-blue-500 px-2 py-1 rounded-md text-white">Modifier</button>
-            </form>
+            </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -40,7 +41,8 @@ export default {
             movies: [],
             selectedMovieId: null,
             selectedMovie: null,
-            editedMovieTitle:''
+            editedMovieTitle:'',
+            currentPage: 1, // Add this line
         };
     },
     created() {
@@ -55,7 +57,7 @@ export default {
         async getMovies() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get('http://127.0.0.1:8000/api/movies', {
+                const response = await axios.get(`http://127.0.0.1:8000/api/movies?page=${this.currentPage}`, { // Modify this line
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -67,56 +69,23 @@ export default {
                 console.log(error.response.data.code);
             }
         },
-        async updateMovieTitle() {
-            if (this.selectedMovie && this.editedMovieTitle) {
-                try {
-                    const token = localStorage.getItem('user-token');
-                    if (!token) {
-                        this.$router.push('/');
-                        return;
-                    }
-                    const headers = {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/merge-patch+json',
-                    };
-                    const updatedMovie = { title: this.editedMovieTitle };
-
-                    await axios.patch(`http://127.0.0.1:8000/api/movies/${this.selectedMovie.id}`, updatedMovie, { headers });
-
-                    // Update the movie title in the local movies array
-                    const movieToUpdate = this.movies.find(movie => movie.id === this.selectedMovie.id);
-                    if (movieToUpdate) {
-                        movieToUpdate.title = this.editedMovieTitle;
-                    }
-
-                    this.editedMovieTitle = '';
-                    this.selectedMovieId = null;
-                } catch (error) {
-                    console.error('Erreur lors de la mise à jour du titre du film :', error);
-                }
+        // Add these methods
+        nextPage() {
+            if (this.currentPage < 3) {
+                this.currentPage++;
+                this.getMovies();
             }
+        },
+        previousPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.getMovies();
+            }
+        },
+        goToPage(page) {
+            this.currentPage = page;
+            this.getMovies();
         },
     },
 };
 </script>
-
-<style scoped>
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    transition: opacity 0.3s ease;
-}
-
-.modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 4px;
-}
-</style>
