@@ -5,7 +5,6 @@
             <div class="flex px-10 flex-wrap mt-5">
                 <div v-for="actor in actors" :key="actor.id"  class="flex flex-col items-center w-1/3 px-3 mb-5">
                     <card-acteur :acteur="actor"/>
-                    <a @click="toggleActorDetails(actor.id)" class="cursor-pointer">Edit</a>
                 </div>
             </div>
         </article>
