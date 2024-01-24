@@ -3,6 +3,10 @@
     <section>
         <article>
             <h1 class="text-3xl px-10 my-10 font-semibold">List of movies</h1>
+            <div class="flex px-10 mt-5">
+                <input v-model="searchText" type="text" placeholder="Search..." class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none">
+                <button @click="searchMovies" class="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+            </div>
             <div class="flex px-10 flex-wrap mt-5">
                 <div v-for="movie in movies" :key="movie.id" class="flex flex-col items-center w-1/3 px-3 mb-5">
                     <card-film :film="movie"/>
@@ -11,16 +15,16 @@
         </article>
         <div class="bg-gradient-to-r flex items-center justify-center">
             <div class="max-w-full md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto bg-white p-6 rounded-lg">
-                <div class="flex justify-center">
+                <div class="flex justify-center" v-if="!isSearching">
                     <nav class="flex space-x-2" aria-label="Pagination">
-                        <button @click="previousPage" :disabled="currentPage === 1" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
+                        <button @click="previousPage" :disabled="currentPage === 1 || isSearching" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
                             Previous
                         </button>
                         <span v-for="page in 3" :key="page" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border hover:bg-gray-300 cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10"
-                              :class="{ '!bg-gray-300': currentPage === page }" @click="goToPage(page)">
-                            {{ page }}
-                        </span>
-                        <button @click="nextPage" :disabled="currentPage === 3" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
+                              :class="{ '!bg-gray-300': currentPage === page }" @click="goToPage(page)" :disabled="isSearching">
+                {{ page }}
+            </span>
+                        <button @click="nextPage" :disabled="currentPage === 3 || isSearching" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
                             Next
                         </button>
                     </nav>
@@ -42,7 +46,9 @@ export default {
             selectedMovieId: null,
             selectedMovie: null,
             editedMovieTitle:'',
-            currentPage: 1, // Add this line
+            currentPage: 1,
+            searchText: '',
+            isSearching: false,
         };
     },
     created() {
@@ -85,6 +91,22 @@ export default {
         goToPage(page) {
             this.currentPage = page;
             this.getMovies();
+        },
+        async searchMovies() {
+            this.isSearching = true;
+            try {
+                const token = localStorage.getItem('user-token');
+                const response = await axios.get(`http://127.0.0.1:8000/api/movies?title=${this.searchText}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/json',
+                    },
+                });
+                this.movies = response.data;
+            } catch (error) {
+                console.error('Error', error);
+                console.log(error.response.data.code);
+            }
         },
     },
 };
