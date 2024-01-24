@@ -24,14 +24,14 @@ onMounted(async () => {
 
 </script>
 <template>
-  <div v-if="actor">
-    <h1>{{ actor.firstName }} {{ actor.lastName }}</h1>
-    <em>Nationalité : {{ actor.nationalite.name }}</em>
+  <div v-if="actor" class="mt-10 mx-10 space-y-2">
+    <h1 class="font-bold text-4xl">{{ actor.firstName }} {{ actor.lastName }}</h1>
+    <p class="">Nationalité : {{ actor.nationalite.name }}</p>
     <hr>
-    <h2>A joué dans les films</h2>
+    <h2 class="text-2xl font-semibold">Filmographie</h2>
     <ul>
       <li v-for="movie in actor.movies">
-        <routerLink :to="'/fiche-movie/'+movie.id" class="link">{{ movie.title }}</routerLink>
+        <routerLink :to="'/fiche-movie/'+movie.id" class="link ml-2">- {{ movie.title }}</routerLink>
       </li>
     </ul>
   </div>
