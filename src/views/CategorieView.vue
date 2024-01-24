@@ -24,11 +24,11 @@ onMounted(async () => {
 
 <template>
   <section>
-    <article>
-      <h2>Catégories</h2>
-      <div class="movies-container">
+    <article class="mt-10 mx-10">
+      <h2 class="font-bold text-4xl">Catégories</h2>
+      <div class="movies-container mt-2">
         <div v-for="categorie in categories" :key="categorie.id" class="card-container">
-          <card-categorie :categorie="categorie"/>
+          <card-categorie :categorie="categorie" />
         </div>
       </div>
     </article>
