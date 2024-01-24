@@ -10,6 +10,7 @@
 <template>
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
         <div class="flex flex-col space-y-1.5 p-6">
+            <img src="affiche.jpeg" alt="Affiche du film" class="mb-3">
             <h3 class="text-2xl font-semibold leading-none tracking-tight">{{ movie.title }}</h3>
             <p class="text-sm text-muted-foreground">{{ movie.description }}</p>
         </div>
