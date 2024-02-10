@@ -25,7 +25,7 @@
                               :class="{ '!bg-gray-300': currentPage === page }" @click="goToPage(page)" :disabled="isSearching">
                 {{ page }}
             </span>
-                        <button @click="nextPage" :disabled="currentPage === 3 || isSearching" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
+                        <button @click="nextPage" :disabled="currentPage === 4 || isSearching" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
                             Next
                         </button>
                     </nav>
@@ -51,7 +51,10 @@
                                         <input v-model="newMovie.title" type="text" placeholder="Title" required class="border-2">
                                         <textarea v-model="newMovie.description" placeholder="Description" required class="border-2"></textarea>
                                         <input v-model="newMovie.duration" type="text" placeholder="Duration" required class="border-2">
-                                        <input v-model="newMovie.image" type="text" placeholder="Image URL" required class="border-2">
+                                        <select v-model="selectedActors" multiple required class="border-2 text-black">
+                                            <option v-for="actor in actors" :value="actor.id" :key="actor.id">{{ actor.firstName }} {{ actor.lastName }}</option>
+                                        </select>
+                                        <input type="file" ref="fileInput" />
                                         <input type="hidden" v-model="newMovie.online">
                                         <button type="submit">Submit</button>
                                     </form>
@@ -86,6 +89,8 @@ export default {
             searchText: '',
             isSearching: false,
             showAddMovieForm: false,
+            actors: [],
+            selectedActors: [],
             newMovie: {
                 category_id: '',
                 title: '',
@@ -100,6 +105,7 @@ export default {
     created() {
         this.getMovies();
         this.getCategories();
+        this.getActors();
     },
     methods: {
         toggleDetails(movieId) {
@@ -122,9 +128,8 @@ export default {
                 console.log(error.response.data.code);
             }
         },
-        // Add these methods
         nextPage() {
-            if (this.currentPage < 3) {
+            if (this.currentPage < 4) {
                 this.currentPage++;
                 this.getMovies();
             }
@@ -165,8 +170,20 @@ export default {
             });
             this.categories = response.data;
         },
+        async getActors() {
+            const token = localStorage.getItem('user-token');
+            const response = await axios.get('http://localhost:8000/api/actors', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json',
+                },
+            });
+            this.actors = response.data;
+        },
         async addMovie() {
             try {
+                const imageId = await this.uploadImage();
+                this.newMovie.image = imageId;
                 const token = localStorage.getItem('user-token');
                 const response = await fetch('http://127.0.0.1:8000/api/movies', {
                     method: 'POST',
@@ -175,7 +192,7 @@ export default {
                         Accept: 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(this.newMovie)
+                    body: JSON.stringify({...this.newMovie, actors: this.selectedActors})
                 });
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -194,7 +211,41 @@ export default {
             } catch (error) {
                 console.error('Error while adding movie:', error);
             }
-        }
+        },
+        async uploadImage() {
+            const fileInput = this.$refs.fileInput;
+            const file = fileInput.files[0];
+
+            if (!file) {
+                console.log("Veuillez sélectionner une image");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            return await this.uploadToApi(formData);
+        },
+        async uploadToApi(formData) {
+            try {
+                const token = localStorage.getItem("user-token");
+                const headers = new Headers();
+                headers.append('Authorization', `Bearer ${token}`);
+                const response = await fetch("http://localhost:8000/api/media_objects", {
+                    method: 'POST',
+                    headers: headers,
+                    body: formData
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                console.log("Réponse de l'API :", data);
+                return data['@id'];
+            } catch (error) {
+                console.error("Erreur lors de l'envoi de l'image :", error);
+            }
+        },
     },
 };
 </script>

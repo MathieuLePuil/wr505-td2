@@ -12,9 +12,7 @@ const login = async () => {
       username: username.value,
       password: password.value
     });
-    // Store the token in localStorage
     localStorage.setItem('user-token', response.data.token);
-    // puis, rediriger vers la page d'accueil
     location.reload();
     location.href = '/';
   } catch (error) {
