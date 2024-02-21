@@ -50,10 +50,14 @@
                                         </select>
                                         <input v-model="newMovie.title" type="text" placeholder="Title" required class="border-2">
                                         <textarea v-model="newMovie.description" placeholder="Description" required class="border-2"></textarea>
-                                        <input v-model="newMovie.duration" type="text" placeholder="Duration" required class="border-2">
-                                        <select v-model="selectedActors" multiple required class="border-2 text-black">
-                                            <option v-for="actor in actors" :value="actor.id" :key="actor.id">{{ actor.firstName }} {{ actor.lastName }}</option>
-                                        </select>
+                                        <input v-model="newMovie.duration" type="number" placeholder="Duration" required class="border-2">
+                                        <input v-model="newMovie.director" type="text" placeholder="Director" required class="border-2">
+                                        <input v-model="newMovie.budget" type="number" placeholder="Budget" required class="border-2">
+                                        <input v-model="newMovie.entries" type="number" placeholder="Entries" required class="border-2">
+                                        <div v-for="actor in actors" :key="actor.id">
+                                            <input type="checkbox" :id="actor.id" :value="actor.id" v-model="selectedActors">
+                                            <label :for="actor.id">{{ actor.firstname }} {{ actor.lastname }}</label>
+                                        </div>
                                         <input type="file" ref="fileInput" />
                                         <input type="hidden" v-model="newMovie.online">
                                         <button type="submit">Submit</button>
@@ -97,6 +101,10 @@ export default {
                 description: '',
                 duration: '',
                 image: '',
+                director: '',
+                budget: '',
+                entries: '',
+                actors: [],
                 online: true
             },
             categories: []
@@ -182,9 +190,16 @@ export default {
         },
         async addMovie() {
             try {
+                console.log(this.selectedActors);
                 const imageId = await this.uploadImage();
                 this.newMovie.image = imageId;
                 const token = localStorage.getItem('user-token');
+
+                // Transform actor IDs to API paths
+                const actorPaths = this.selectedActors.map(id => `/api/actor/${id}`);
+                // Transform category ID to API path
+                const categoryPath = `/api/categories/${this.newMovie.category_id}`;
+
                 const response = await fetch('http://127.0.0.1:8000/api/movies', {
                     method: 'POST',
                     headers: {
@@ -192,7 +207,7 @@ export default {
                         Accept: 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({...this.newMovie, actors: this.selectedActors})
+                    body: JSON.stringify({...this.newMovie, actor: actorPaths, category: categoryPath})
                 });
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -205,8 +220,12 @@ export default {
                         description: '',
                         duration: '',
                         image: '',
+                        director: '',
+                        budget: '',
+                        entries: '',
                         online: true
                     };
+                    this.selectedActors = []; // Reset selected actors
                 }
             } catch (error) {
                 console.error('Error while adding movie:', error);
