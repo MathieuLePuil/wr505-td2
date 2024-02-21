@@ -10,19 +10,18 @@
 <template>
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
         <div class="flex flex-col space-y-1.5 p-6">
-            <img src="affiche.jpeg" alt="Affiche du film" class="mb-3">
+            <img :src="'http://localhost:8000' + movie.imageUrl" alt="Affiche du film" class="mb-3">
             <h3 class="text-2xl font-semibold leading-none tracking-tight">{{ movie.title }}</h3>
             <p class="text-sm text-muted-foreground">{{ movie.description }}</p>
         </div>
         <div class="p-6 grid gap-4 border-y py-4">
             <div class="space-y-2">
-                <p class="text-sm">Release Date: {{ movie.releaseDate }}</p>
                 <p class="text-sm">Duration: {{ movie.duration }} minutes</p>
             </div>
             <h4 class="text-lg font-semibold mt-4">Cast:</h4>
             <ul v-for="actor in movie.actor" class="space-y-2">
                 <li>
-                    {{ actor.firstName }} {{ actor.lastName }}  
+                    {{ actor.firstname }} {{ actor.lastname }}
                 </li>
             </ul>
             <routerLink :to="'/fiche-movie/'+movie.id"  class="">
