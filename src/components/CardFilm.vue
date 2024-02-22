@@ -6,19 +6,13 @@ import { defineProps } from 'vue';
 const props = defineProps(['film']);
 const movie = props.film;
 
-// Votre logique existante
-
-// Convertissez la date de sortie en format local
 const date = new Date(movie.releaseDate);
 const options = { year: 'numeric', month: 'long', day: 'numeric' };
 movie.releaseDate = date.toLocaleDateString('fr-FR', options);
 
-// Déclaration réactive des acteurs
 const actors = ref([]);
 
-// Fonction pour récupérer les infos des acteurs
 const getActorsInfo = async (actorUrls) => {
-    console.log("1"); // Pour le débogage
     const token = localStorage.getItem('user-token');
     const requests = actorUrls.map(url =>
         axios.get(`http://127.0.0.1:8000${url}`, {
@@ -30,14 +24,13 @@ const getActorsInfo = async (actorUrls) => {
     );
     try {
         const actorsData = await Promise.all(requests);
-        actors.value = actorsData; // Mise à jour de la liste des acteurs
-        console.log(actorsData); // Pour le débogage
+        actors.value = actorsData;
+        console.log(actorsData);
     } catch (error) {
         console.error('Erreur lors de la récupération des infos des acteurs :', error);
     }
 };
 
-// Utilisation de onMounted pour appeler getActorsInfo dès que le composant est monté
 onMounted(() => {
     if (movie.actor && movie.actor.length > 0) {
         getActorsInfo(movie.actor);
