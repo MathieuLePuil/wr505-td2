@@ -25,7 +25,6 @@ const getActorsInfo = async (actorUrls) => {
     try {
         const actorsData = await Promise.all(requests);
         actors.value = actorsData;
-        console.log(actorsData);
     } catch (error) {
         console.error('Erreur lors de la récupération des infos des acteurs :', error);
     }
@@ -66,7 +65,7 @@ onMounted(() => {
     <div :class="[{ 'modal': selectedMovieId, 'scale-0': !selectedMovieId }]">
         <div class="modal-content" v-if="selectedMovie">
             <h2 class="text-xl font-bold mb-2">{{ selectedMovie.title }}</h2>
-            <form @submit.prevent="updateMovieTitle">
+            <form @submit.prevent="updateMovie">
                 <div class="flex flex-col">
                     <label for="editMovieTitle">Titre du film :</label>
                     <input
@@ -74,6 +73,19 @@ onMounted(() => {
                         class="border border-gray-300 p-2 rounded-md mb-2"
                         id="editMovieTitle"
                         v-model="editedMovieTitle"
+                    />
+                    <label for="editMovieDescription">Description :</label>
+                    <textarea
+                        class="border border-gray-300 p-2 rounded-md mb-2"
+                        id="editMovieDescription"
+                        v-model="selectedMovie.description"
+                    ></textarea>
+                    <label for="editMovieDuration">Durée :</label>
+                    <input
+                        type="number"
+                        class="border border-gray-300 p-2 rounded-md mb-2"
+                        id="editMovieDuration"
+                        v-model="selectedMovie.duration"
                     />
                 </div>
                 <button type="submit" class="bg-blue-500 px-2 py-1 rounded-md text-white">Modifier</button>
@@ -118,8 +130,8 @@ export default {
                 console.log(error.response.data.code);
             }
         },
-        async updateMovieTitle() {
-            if (this.selectedMovie && this.editedMovieTitle) {
+        async updateMovie() {
+            if (this.selectedMovie) {
                 try {
                     const token = localStorage.getItem('user-token');
                     if (!token) {
@@ -130,19 +142,22 @@ export default {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/merge-patch+json',
                     };
-                    const updatedMovie = { title: this.editedMovieTitle };
 
-                    await axios.patch(`http://127.0.0.1:8000/api/movies/${this.selectedMovie.id}`, updatedMovie, { headers });
+                    const movieToUpdate = {
+                        title: this.editedMovieTitle,
+                    };
 
-                    const movieToUpdate = this.movies.find(movie => movie.id === this.selectedMovie.id);
-                    if (movieToUpdate) {
-                        movieToUpdate.title = this.editedMovieTitle;
+                    await axios.patch(`http://127.0.0.1:8000/api/movies/${this.selectedMovie.id}`, movieToUpdate, { headers });
+
+                    const movieInList = this.movies.find(movie => movie.id === this.selectedMovie.id);
+                    if (movieInList) {
+                        Object.assign(movieInList, this.selectedMovie);
+                        movieInList.title = this.editedMovieTitle;
                     }
 
-                    this.editedMovieTitle = '';
                     this.selectedMovieId = null;
                 } catch (error) {
-                    console.error('Erreur lors de la mise à jour du titre du film :', error);
+                    console.error('Erreur lors de la mise à jour du film :', error);
                 }
             }
         },
