@@ -5,6 +5,7 @@
             <div class="flex px-10 mt-5">
                 <input v-model="searchText" type="text" placeholder="Search..." class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none">
                 <button @click="searchActors" class="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+                <button @click="showAddActorForm = true" class="bg-blue-500 text-white px-4 py-2 rounded ml-10">Add Actor</button>
             </div>
             <div class="flex px-10 flex-wrap mt-5">
                 <div v-for="actor in actors" :key="actor.id"  class="flex flex-col items-center w-1/3 px-3 mb-5">
@@ -26,24 +27,44 @@
                 </div>
             </div>
         </div>
-    </section>
-    <div :class="[{ 'modal': selectedActorId, 'scale-0': !selectedActorId }]">
-        <div class="modal-content" v-if="selectedActor">
-            <h2 class="text-xl font-bold mb-2">{{ selectedActor.firstname }}</h2>
-            <form @submit.prevent="updateActorName">
-                <div class="flex flex-col">
-                    <label for="editActorTitle">Nom de l'acteur :</label>
-                    <input
-                        type="text"
-                        class="border border-gray-300 p-2 rounded-md mb-2"
-                        id="editActorTitle"
-                        v-model="editedActorName"
-                    />
+        <div v-if="showAddActorForm" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <form @submit.prevent="addActor">
+                                <div class="mb-4">
+                                    <label for="firstname" class="block text-gray-700 text-sm font-bold mb-2">First Name:</label>
+                                    <input type="text" id="firstname" v-model="newActor.firstname" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="lastname" class="block text-gray-700 text-sm font-bold mb-2">Last Name:</label>
+                                    <input type="text" id="lastname" v-model="newActor.lastname" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="nationality" class="block text-gray-700 text-sm font-bold mb-2">Nationality:</label>
+                                    <input type="text" id="nationality" v-model="newActor.nationality" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="movies" class="block text-gray-700 text-sm font-bold mb-2">Movies:</label>
+                                    <select multiple id="movies" v-model="newActor.movies" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        <option v-for="movie in movies" :key="movie.id" :value="movie.id">{{ movie.title }}</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                                        Add Actor
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="bg-blue-500 px-2 py-1 rounded-md text-white">Modifier</button>
-            </form>
+            </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -60,10 +81,19 @@ export default {
             editedActorName:'',
             currentPage: 1,
             isSearching: false,
+            showAddActorForm: false,
+            newActor: {
+                firstname: '',
+                lastname: '',
+                nationality: '',
+                movies: []
+            },
+            movies: []
         };
     },
     created() {
         this.getActors();
+        this.getMovies();
     },
     methods: {
         toggleActorDetails(actorId) {
@@ -84,6 +114,40 @@ export default {
             } catch (error) {
                 console.error('Error', error);
                 console.log(error.response.data.code);
+            }
+        },
+        async getMovies() {
+            try {
+                const token = localStorage.getItem('user-token');
+                const response = await axios.get('http://127.0.0.1:8000/api/movies', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/json',
+                    },
+                });
+                this.movies = response.data;
+            } catch (error) {
+                console.error('Error', error);
+                console.log(error.response.data.code);
+            }
+        },
+        async addActor() {
+            try {
+                const token = localStorage.getItem('user-token');
+                const headers = {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                };
+                // Transform the array of movie IDs into an array of paths
+                const moviePaths = this.newActor.movies.map(id => `/api/movie/${id}`);
+                // Replace the movie IDs with the movie paths in the newActor object
+                const actorData = { ...this.newActor, movies: moviePaths };
+                const response = await axios.post('http://127.0.0.1:8000/api/actors', actorData, { headers });
+                this.actors.push(response.data);
+                this.showAddActorForm = false;
+                this.newActor = { firstname: '', lastname: '', nationality: '', movies: [] };
+            } catch (error) {
+                console.error('Error while adding actor:', error);
             }
         },
         nextPage() {
