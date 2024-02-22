@@ -12,6 +12,20 @@
                 </div>
             </div>
         </article>
+        <div class="bg-gradient-to-r flex items-center justify-center">
+            <div class="max-w-full md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto bg-white p-6 rounded-lg">
+                <div class="flex justify-center" v-if="!isSearching">
+                    <nav class="flex space-x-2" aria-label="Pagination">
+                        <button @click="previousPage" :disabled="currentPage === 1 || isSearching" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
+                            Previous
+                        </button>
+                        <button @click="nextPage" :disabled="currentPage === 4 || isSearching" class="relative inline-flex items-center px-4 py-2 text-sm bg-gradient-to-r bg-gray-600 text-white border hover:bg-gray-800 font-semibold cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10">
+                            Next
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
     </section>
     <div :class="[{ 'modal': selectedActorId, 'scale-0': !selectedActorId }]">
         <div class="modal-content" v-if="selectedActor">
@@ -44,7 +58,8 @@ export default {
             selectedActorId: null,
             selectedActor: null,
             editedActorName:'',
-            searchText: ''
+            currentPage: 1,
+            isSearching: false,
         };
     },
     created() {
@@ -59,7 +74,7 @@ export default {
         async getActors() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get('http://127.0.0.1:8000/api/actors', {
+                const response = await axios.get(`http://127.0.0.1:8000/api/actors?page=${this.currentPage}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -69,6 +84,18 @@ export default {
             } catch (error) {
                 console.error('Error', error);
                 console.log(error.response.data.code);
+            }
+        },
+        nextPage() {
+            if (this.currentPage < 4) {
+                this.currentPage++;
+                this.getActors();
+            }
+        },
+        previousPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.getActors();
             }
         },
         async updateActorName() {
