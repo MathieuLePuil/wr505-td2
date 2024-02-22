@@ -2,6 +2,10 @@
     <section>
         <article>
             <h1 class="text-3xl px-10 my-10 font-semibold">List of actors</h1>
+            <div class="flex px-10 mt-5">
+                <input v-model="searchText" type="text" placeholder="Search..." class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none">
+                <button @click="searchActors" class="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+            </div>
             <div class="flex px-10 flex-wrap mt-5">
                 <div v-for="actor in actors" :key="actor.id"  class="flex flex-col items-center w-1/3 px-3 mb-5">
                     <card-acteur :acteur="actor"/>
@@ -39,7 +43,8 @@ export default {
             actors: [],
             selectedActorId: null,
             selectedActor: null,
-            editedActorName:''
+            editedActorName:'',
+            searchText: ''
         };
     },
     created() {
@@ -93,6 +98,21 @@ export default {
                 } catch (error) {
                     console.error('Erreur lors de la mise à jour du nom de l\'acteur :', error);
                 }
+            }
+        },
+        async searchActors() {
+            try {
+                const token = localStorage.getItem('user-token');
+                const response = await axios.get(`http://127.0.0.1:8000/api/actors?lastname=${this.searchText}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/json',
+                    },
+                });
+                this.actors = response.data;
+            } catch (error) {
+                console.error('Error', error);
+                console.log(error.response.data.code);
             }
         },
     },
