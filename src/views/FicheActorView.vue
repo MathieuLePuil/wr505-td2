@@ -25,8 +25,8 @@ onMounted(async () => {
 </script>
 <template>
   <div v-if="actor" class="mt-10 mx-10 space-y-2">
-    <h1 class="font-bold text-4xl">{{ actor.firstName }} {{ actor.lastName }}</h1>
-    <p class="">Nationalité : {{ actor.nationalite.name }}</p>
+    <h1 class="font-bold text-4xl">{{ actor.firstname }} {{ actor.lastname }}</h1>
+    <p class="">Nationalité : {{ actor.nationality }}</p>
     <hr>
     <h2 class="text-2xl font-semibold">Filmographie</h2>
     <ul>
