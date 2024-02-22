@@ -22,15 +22,13 @@ onMounted(async () => {
   )
   film.value = filmResponse.data
 })
-
-let posterPath = "/src/assets/posters/";
 </script>
+
 <template>
     <div v-if="film === ''">Loading...</div>
     <section v-else class="flex mx-10 mt-10">
         <div class="mx-5">
-            <img src="/affiche.jpeg" alt="Affiche du film">
-            <!--      <img class="banniere" :src="posterPath+film.image" alt="affiche du film">-->
+            <img :src="'http://localhost:8000' + film.imageUrl" alt="Affiche du film">
         </div>
         <div>
             <article class="fiche-article">

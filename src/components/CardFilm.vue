@@ -18,12 +18,6 @@
             <div class="space-y-2">
                 <p class="text-sm">Duration: {{ movie.duration }} minutes</p>
             </div>
-            <h4 class="text-lg font-semibold mt-4">Cast:</h4>
-            <ul v-for="actor in movie.actor" class="space-y-2">
-                <li>
-                    {{ actor.firstname }} {{ actor.lastname }}
-                </li>
-            </ul>
             <routerLink :to="'/fiche-movie/'+movie.id"  class="">
                 <div class="flex justify-center items-center h-8 mt-4 cursor-pointer bg-gray-600 text-white rounded-md hover:bg-gray-800">See more</div>
             </routerLink>
