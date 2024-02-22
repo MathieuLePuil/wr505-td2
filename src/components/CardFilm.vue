@@ -1,11 +1,50 @@
 <script setup>
-    const props = defineProps(['film'])
-    const movie = props.film
+import {onMounted, ref} from 'vue';
+import axios from 'axios';
+import { defineProps } from 'vue';
 
-    const date = new Date(movie.releaseDate)
-    const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
-    movie.releaseDate = date.toLocaleDateString('fr-FR', options)
+const props = defineProps(['film']);
+const movie = props.film;
+
+// Votre logique existante
+
+// Convertissez la date de sortie en format local
+const date = new Date(movie.releaseDate);
+const options = { year: 'numeric', month: 'long', day: 'numeric' };
+movie.releaseDate = date.toLocaleDateString('fr-FR', options);
+
+// Déclaration réactive des acteurs
+const actors = ref([]);
+
+// Fonction pour récupérer les infos des acteurs
+const getActorsInfo = async (actorUrls) => {
+    console.log("1"); // Pour le débogage
+    const token = localStorage.getItem('user-token');
+    const requests = actorUrls.map(url =>
+        axios.get(`http://127.0.0.1:8000${url}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json',
+            },
+        }).then(response => response.data)
+    );
+    try {
+        const actorsData = await Promise.all(requests);
+        actors.value = actorsData; // Mise à jour de la liste des acteurs
+        console.log(actorsData); // Pour le débogage
+    } catch (error) {
+        console.error('Erreur lors de la récupération des infos des acteurs :', error);
+    }
+};
+
+// Utilisation de onMounted pour appeler getActorsInfo dès que le composant est monté
+onMounted(() => {
+    if (movie.actor && movie.actor.length > 0) {
+        getActorsInfo(movie.actor);
+    }
+});
 </script>
+
 
 <template>
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
@@ -17,6 +56,11 @@
         <div class="p-6 grid gap-4 border-y py-4">
             <div class="space-y-2">
                 <p class="text-sm">Duration: {{ movie.duration }} minutes</p>
+                <ul>
+                    <li v-for="actor in actors" :key="actor.id">
+                        {{ actor.firstname }} {{ actor.lastname }}
+                    </li>
+                </ul>
             </div>
             <routerLink :to="'/fiche-movie/'+movie.id"  class="">
                 <div class="flex justify-center items-center h-8 mt-4 cursor-pointer bg-gray-600 text-white rounded-md hover:bg-gray-800">See more</div>
