@@ -11,16 +11,27 @@ let film = ref('')
 const userToken = ref(localStorage.getItem('user-token'));
 
 onMounted(async () => {
-  const filmResponse = await axios.get(
-      'http://localhost:8000/api/movie/' + id,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${userToken.value}`
+    const filmResponse = await axios.get(
+        'http://localhost:8000/api/movie/' + id,
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${userToken.value}`
+            }
         }
-      }
-  )
-  film.value = filmResponse.data
+    )
+    film.value = filmResponse.data
+
+    let actorPromises = film.value.actor.map(actor => axios.get('http://localhost:8000' + actor, {
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${userToken.value}`
+        }
+    }));
+
+    let actorResponses = await Promise.all(actorPromises);
+
+    film.value.actor = actorResponses.map(response => response.data);
 })
 </script>
 
@@ -43,7 +54,7 @@ onMounted(async () => {
                 <h2 class="font-medium text-2xl mt-5 mb-3">Acteurs</h2>
                 <div v-for="acteur in film.actor" :key="acteur.id">
                     <routerLink :to="'/fiche-actor/'+acteur.id"  class="">
-                        <p>- {{ acteur.firstName }} {{ acteur.lastName }}</p>
+                        <p>- {{ acteur.firstname }} {{ acteur.lastname }}</p>
                     </routerLink>
                 </div>
             </article>
