@@ -56,15 +56,29 @@ onMounted(() => {
     </section>
     <div :class="[{ 'modal': selectedActorId, 'scale-0': !selectedActorId }]">
         <div class="modal-content" v-if="selectedActor">
-            <h2 class="text-xl font-bold mb-2">{{ selectedActor.name }}</h2>
-            <form @submit.prevent="updateActorName">
+            <h2 class="text-xl font-bold mb-2">{{ selectedActor.firstname }} {{ selectedActor.lastname }}</h2>
+            <form @submit.prevent="updateActor">
                 <div class="flex flex-col">
-                    <label for="editActorTitle">Nom de l'acteur :</label>
+                    <label for="editActorFirstname">Prénom de l'acteur :</label>
                     <input
                         type="text"
                         class="border border-gray-300 p-2 rounded-md mb-2"
-                        id="editActorTitle"
-                        v-model="editedActorName"
+                        id="editActorFirstname"
+                        v-model="selectedActor.firstname"
+                    />
+                    <label for="editActorLastname">Nom de l'acteur :</label>
+                    <input
+                        type="text"
+                        class="border border-gray-300 p-2 rounded-md mb-2"
+                        id="editActorLastname"
+                        v-model="selectedActor.lastname"
+                    />
+                    <label for="editActorNationality">Nationalité de l'acteur :</label>
+                    <input
+                        type="text"
+                        class="border border-gray-300 p-2 rounded-md mb-2"
+                        id="editActorNationality"
+                        v-model="selectedActor.nationality"
                     />
                 </div>
                 <button type="submit" class="bg-blue-500 px-2 py-1 rounded-md text-white">Modifier</button>
@@ -109,8 +123,8 @@ export default {
                 console.log(error.response.data.code);
             }
         },
-        async updateActorName() {
-            if (this.selectedActor && this.editedActorName) {
+        async updateActor() {
+            if (this.selectedActor) {
                 try {
                     const token = localStorage.getItem('user-token');
                     if (!token) {
@@ -121,20 +135,23 @@ export default {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/merge-patch+json',
                     };
-                    const updatedActor = { lastName: this.editedActorName };
 
-                    await axios.patch(`http://127.0.0.1:8000/api/actors/${this.selectedActor.id}`, updatedActor, { headers });
+                    const actorToUpdate = {
+                        firstname: this.selectedActor.firstname,
+                        lastname: this.selectedActor.lastname,
+                        nationality: this.selectedActor.nationality
+                    };
 
-                    // Update the actor name in the local actors array
-                    const actorToUpdate = this.actors.find(actor => actor.id === this.selectedActor.id);
-                    if (actorToUpdate) {
-                        actorToUpdate.lastName = this.editedActorName;
+                    await axios.patch(`http://127.0.0.1:8000/api/actors/${this.selectedActor.id}`, actorToUpdate, { headers });
+
+                    const actorInList = this.actors.find(actor => actor.id === this.selectedActor.id);
+                    if (actorInList) {
+                        Object.assign(actorInList, this.selectedActor);
                     }
 
-                    this.editedActorName = '';
                     this.selectedActorId = null;
                 } catch (error) {
-                    console.error('Erreur lors de la mise à jour du nom de l\'acteur :', error);
+                    console.error('Erreur lors de la mise à jour de l\'acteur :', error);
                 }
             }
         },

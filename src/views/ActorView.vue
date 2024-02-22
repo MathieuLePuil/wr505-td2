@@ -138,9 +138,7 @@ export default {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 };
-                // Transform the array of movie IDs into an array of paths
                 const moviePaths = this.newActor.movies.map(id => `/api/movie/${id}`);
-                // Replace the movie IDs with the movie paths in the newActor object
                 const actorData = { ...this.newActor, movies: moviePaths };
                 const response = await axios.post('http://127.0.0.1:8000/api/actors', actorData, { headers });
                 this.actors.push(response.data);
