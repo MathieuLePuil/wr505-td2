@@ -11,26 +11,35 @@ let film = ref('')
 const userToken = ref(localStorage.getItem('user-token'));
 
 onMounted(async () => {
-  const filmResponse = await axios.get(
-      'http://localhost:8000/api/movie/' + id,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${userToken.value}`
+    const filmResponse = await axios.get(
+        'http://localhost:8000/api/movie/' + id,
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${userToken.value}`
+            }
         }
-      }
-  )
-  film.value = filmResponse.data
-})
+    )
+    film.value = filmResponse.data
 
-let posterPath = "/src/assets/posters/";
+    let actorPromises = film.value.actor.map(actor => axios.get('http://localhost:8000' + actor, {
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${userToken.value}`
+        }
+    }));
+
+    let actorResponses = await Promise.all(actorPromises);
+
+    film.value.actor = actorResponses.map(response => response.data);
+})
 </script>
+
 <template>
     <div v-if="film === ''">Loading...</div>
     <section v-else class="flex mx-10 mt-10">
         <div class="mx-5">
-            <img src="/affiche.jpeg" alt="Affiche du film">
-            <!--      <img class="banniere" :src="posterPath+film.image" alt="affiche du film">-->
+            <img :src="'http://localhost:8000' + film.imageUrl" alt="Affiche du film">
         </div>
         <div>
             <article class="fiche-article">
@@ -45,7 +54,7 @@ let posterPath = "/src/assets/posters/";
                 <h2 class="font-medium text-2xl mt-5 mb-3">Acteurs</h2>
                 <div v-for="acteur in film.actor" :key="acteur.id">
                     <routerLink :to="'/fiche-actor/'+acteur.id"  class="">
-                        <p>- {{ acteur.firstName }} {{ acteur.lastName }}</p>
+                        <p>- {{ acteur.firstname }} {{ acteur.lastname }}</p>
                     </routerLink>
                 </div>
             </article>
