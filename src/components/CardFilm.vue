@@ -51,7 +51,9 @@ onMounted(() => {
                 <p class="text-sm">Duration: {{ movie.duration }} minutes</p>
                 <ul>
                     <li v-for="actor in actors" :key="actor.id">
-                        {{ actor.firstname }} {{ actor.lastname }}
+                        <routerLink :to="'/fiche-actor/'+actor.id"  class="">
+                            <p>- {{ actor.firstname }} {{ actor.lastname }}</p>
+                        </routerLink>
                     </li>
                 </ul>
             </div>
@@ -132,7 +134,6 @@ export default {
 
                     await axios.patch(`http://127.0.0.1:8000/api/movies/${this.selectedMovie.id}`, updatedMovie, { headers });
 
-                    // Update the movie title in the local movies array
                     const movieToUpdate = this.movies.find(movie => movie.id === this.selectedMovie.id);
                     if (movieToUpdate) {
                         movieToUpdate.title = this.editedMovieTitle;
