@@ -11,6 +11,7 @@ const categorie = props.categorie
                 <div class="flex flex-col space-y-4">
                     <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">{{ categorie.name }}</h1>
                 </div>
+                <p class="text-red-500">{{ errorMessage }}</p>
                 <routerLink :to="'/fiche-categorie/'+categorie.id"  class="">
                     <div class="flex justify-center items-center h-8 mt-4 cursor-pointer bg-gray-600 text-white rounded-md hover:bg-gray-800">See more</div>
                 </routerLink>
@@ -79,6 +80,7 @@ export default {
             categorie: {},
             showEditForm: false,
             showDeleteConfirmation: false,
+            errorMessage: null,
         };
     },
     methods: {
@@ -120,6 +122,16 @@ export default {
                 const headers = {
                     Authorization: `Bearer ${token}`,
                 };
+
+                // Fetch the category data
+                const categoryResponse = await axios.get(`http://127.0.0.1:8000/api/categories/${categorie.id}`, { headers });
+
+                // Check if the category is linked to any movies
+                if (categoryResponse.data.movies && categoryResponse.data.movies.length > 0) {
+                    this.errorMessage = 'Cannot delete category: It is linked to one or more movies.';
+                    this.showDeleteConfirmation = false;
+                    return;
+                }
 
                 await axios.delete(`http://127.0.0.1:8000/api/categories/${categorie.id}`, { headers });
 
