@@ -1,6 +1,34 @@
 <script setup>
-const props = defineProps(['acteur'])
-const actor = props.acteur
+import {onMounted, ref} from 'vue';
+import axios from 'axios';
+import { defineProps } from 'vue';
+
+const props = defineProps(['acteur']);
+const actor = props.acteur;
+
+const movies = ref([]);
+
+const getActorMovies = async () => {
+    const token = localStorage.getItem('user-token');
+    try {
+        // Fetch the actor data
+        const actorResponse = await axios.get(`http://127.0.0.1:8000/api/actor/${actor.id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json',
+            },
+        });
+
+        // Extract the movies from the actor data
+        movies.value = actorResponse.data.movies;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des films de l\'acteur :', error);
+    }
+};
+
+onMounted(() => {
+    getActorMovies();
+});
 </script>
 
 <template>
@@ -8,12 +36,12 @@ const actor = props.acteur
         <div class="container px-4 md:px-6">
             <div class="grid gap-6">
                 <div class="flex flex-col space-y-4">
-                    <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">{{ actor.firstName }} {{ actor.lastName }}</h1>
-                    <p class="max-w-[600px] text-zinc-500 md:text-xl dark:text-zinc-400">{{ nationalite }}</p>
+                    <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">{{ actor.firstname }} {{ actor.lastname }}</h1>
+                    <p class="max-w-[600px] text-zinc-500 md:text-xl dark:text-zinc-400">{{ actor.nationality }}</p>
                 </div>
                 <div class="flex flex-col space-y-4">
                     <h2 class="text-2xl font-bold tracking-tighter sm:text-3xl xl:text-4xl/none">Movies</h2>
-                    <div v-for="movie in actor.movies">
+                    <div v-for="movie in movies" :key="movie.id">
                         <div class="space-y-1">
                             <routerLink :to="'/fiche-movie/'+movie.id" class="link">{{ movie.title }}</routerLink>
                         </div>

@@ -11,7 +11,7 @@
     </section>
     <div :class="[{ 'modal': selectedActorId, 'scale-0': !selectedActorId }]">
         <div class="modal-content" v-if="selectedActor">
-            <h2 class="text-xl font-bold mb-2">{{ selectedActor.name }}</h2>
+            <h2 class="text-xl font-bold mb-2">{{ selectedActor.firstname }}</h2>
             <form @submit.prevent="updateActorName">
                 <div class="flex flex-col">
                     <label for="editActorTitle">Nom de l'acteur :</label>
