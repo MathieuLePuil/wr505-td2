@@ -44,7 +44,6 @@ onMounted(() => {
             <img :src="'http://localhost:8000' + movie.imageUrl" alt="Affiche du film" class="mb-3">
             <h3 class="text-2xl font-semibold leading-none tracking-tight">{{ movie.title }}</h3>
             <p class="text-sm text-muted-foreground">{{ movie.description }}</p>
-            <p>{{movie.id}}</p>
         </div>
         <div class="p-6 grid gap-4 border-y py-4">
             <div class="space-y-2">

@@ -13,6 +13,7 @@ const login = async () => {
       password: password.value
     });
     localStorage.setItem('user-token', response.data.token);
+    localStorage.setItem('username', username.value);
     location.reload();
     location.href = '/';
   } catch (error) {
