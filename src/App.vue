@@ -42,7 +42,7 @@ const logout = () => {
                                 <RouterLink to="/movies" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Movies</RouterLink>
                                 <RouterLink to="/actors" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Actors</RouterLink>
                                 <RouterLink to="/categories" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Categories</RouterLink>
-                                <RouterLink to="/my-account" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">My Account</RouterLink>
+                                <RouterLink to="/account" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">My Account</RouterLink>
                             </div>
                         </div>
                     </div>
