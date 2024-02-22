@@ -38,7 +38,6 @@ onMounted(() => {
                 <div class="flex flex-col space-y-4">
                     <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">{{ actor.firstname }} {{ actor.lastname }}</h1>
                     <p class="max-w-[600px] text-zinc-500 md:text-xl dark:text-zinc-400">{{ actor.nationality }}</p>
-                    <p class="max-w-[600px] text-zinc-500 md:text-xl dark:text-zinc-400">{{ actor.id }}</p>
                 </div>
                 <div class="flex flex-col space-y-4">
                     <h2 class="text-2xl font-bold tracking-tighter sm:text-3xl xl:text-4xl/none">Movies</h2>
