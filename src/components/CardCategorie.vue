@@ -6,9 +6,9 @@ const categorie = props.categorie
 
 <template>
     <routerLink :to="'/fiche-categorie/'+categorie.id" class="">
-  <div class="ml-3">
-    <h3>- {{categorie.name}}</h3>
-  </div>
+        <div class="ml-3 mb-2">
+            <h3>- {{categorie.name}}</h3>
+        </div>
     </routerLink>
 </template>
 
