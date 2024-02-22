@@ -4,6 +4,7 @@ import FicheMovieView from "../views/FicheMovieView.vue";
 import FicheActorView from "../views/FicheActorView.vue";
 import FicheCategoryView from "../views/FicheCategoryView.vue";
 import LoginView from "../views/LoginView.vue";
+import AccountView from "@/views/AccountView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,6 +48,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/account',
+      name: 'account',
+      component: AccountView
     },
   ]
 })
