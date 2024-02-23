@@ -1,29 +1,63 @@
-# moviesApp
+# wr505-td2
 
-This template should help get you started developing with Vue 3 in Vite.
+# Installation du Projet Vue.js
 
-## Recommended IDE Setup
+Suivez ces étapes pour installer et exécuter le projet sur votre machine locale.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Prérequis
 
-## Customize configuration
+Assurez-vous d'avoir `git` et `Node.js` (incluant `npm`) installés sur votre machine. Pour vérifier, exécutez les commandes suivantes dans votre terminal :
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```bash
+git --version
+node --version
+npm --version
 ```
 
-### Compile and Hot-Reload for Development
 
-```sh
-npm run dev
-```
+Si ces commandes renvoient des versions, cela signifie que vous êtes prêt à continuer. Sinon, veuillez installer `git` et `Node.js` avant de continuer.
 
-### Compile and Minify for Production
+## Étapes d'Installation
 
-```sh
-npm run build
-```
+1. **Cloner le dépôt**
+
+   Ouvrez votre terminal et exécutez la commande suivante pour cloner le dépôt :
+
+    ```bash
+    git clone https://github.com/MathieuLePuil/wr505-td2.git
+    ```
+<br>
+
+2. **Naviguer dans le répertoire du projet**
+
+   Changez le répertoire de travail pour accéder au dossier du projet cloné :
+
+    ```bash
+    cd wr505-td2
+    ```
+<br>
+
+3. **Installer les dépendances**
+
+   Installez toutes les dépendances requises pour le projet en exécutant :
+
+    ```bash
+    npm install
+    ```
+
+<br>
+
+4. **Démarrer le serveur de développement**
+
+   Lancez le serveur de développement avec la commande suivante :
+
+    ```bash
+    npm run dev
+    ```
+
+
+Après le démarrage du serveur, vous devriez voir des messages dans le terminal indiquant que le serveur fonctionne correctement.
+
+## Accéder à l'Application
+
+Une fois que le serveur de développement est en marche, ouvrez votre navigateur et accédez à http://localhost:5173 pour voir l'application en action.
