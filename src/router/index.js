@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import FicheMovieView from "../views/FicheMovieView.vue";
 import FicheActorView from "../views/FicheActorView.vue";
-import FicheCategoryView from "../views/FicheCategoryView.vue";
 import LoginView from "../views/LoginView.vue";
 import AccountView from "@/views/AccountView.vue";
 
@@ -38,11 +37,6 @@ const router = createRouter({
       path: '/fiche-actor/:id',
       name: 'ficheActor',
       component: FicheActorView
-    },
-    {
-      path: '/fiche-categorie/:id',
-      name: 'ficheCategorie',
-      component: FicheCategoryView
     },
     {
       path: '/login',

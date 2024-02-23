@@ -176,7 +176,6 @@ export default {
 
                     await axios.patch(`http://127.0.0.1:8000/api/actors/${this.selectedActor.id}`, updatedActor, { headers });
 
-                    // Update the actor name in the local actors array
                     const actorToUpdate = this.actors.find(actor => actor.id === this.selectedActor.id);
                     if (actorToUpdate) {
                         actorToUpdate.lastName = this.editedActorName;

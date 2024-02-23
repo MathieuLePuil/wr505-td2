@@ -120,7 +120,7 @@ export default {
         async getMovies() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get(`http://127.0.0.1:8000/api/movies?page=${this.currentPage}`, { // Modify this line
+                const response = await axios.get(`http://127.0.0.1:8000/api/movies?page=${this.currentPage}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -191,9 +191,7 @@ export default {
                 this.newMovie.image = imageId;
                 const token = localStorage.getItem('user-token');
 
-                // Transform actor IDs to API paths
                 const actorPaths = this.selectedActors.map(id => `/api/actor/${id}`);
-                // Transform category ID to API path
                 const categoryPath = `/api/categories/${this.newMovie.category_id}`;
 
                 const response = await fetch('http://127.0.0.1:8000/api/movies', {
@@ -221,7 +219,7 @@ export default {
                         entries: '',
                         online: true
                     };
-                    this.selectedActors = []; // Reset selected actors
+                    this.selectedActors = [];
                 }
             } catch (error) {
                 console.error('Error while adding movie:', error);

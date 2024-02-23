@@ -207,7 +207,6 @@ export default {
 
                 this.showDeleteConfirmation = false;
 
-                // Refresh the list of movies
                 this.$emit('refreshMovies');
             } catch (error) {
                 console.error('Erreur lors de la suppression du film :', error);
