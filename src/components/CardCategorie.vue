@@ -12,9 +12,6 @@ const categorie = props.categorie
                     <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">{{ categorie.name }}</h1>
                 </div>
                 <p class="text-red-500">{{ errorMessage }}</p>
-                <routerLink :to="'/fiche-categorie/'+categorie.id"  class="">
-                    <div class="flex justify-center items-center h-8 mt-4 cursor-pointer bg-gray-600 text-white rounded-md hover:bg-gray-800">See more</div>
-                </routerLink>
                 <a @click="toggleCategorieDetails(categorie.id)" class="cursor-pointer flex justify-center items-center h-8 mt-4 bg-gray-300 text-black rounded-md hover:bg-gray-400">Edit</a>
                 <button @click="showDeleteConfirmation = true" class="bg-red-500 px-2 py-1 rounded-md text-white">Delete</button>
             </div>
@@ -123,10 +120,8 @@ export default {
                     Authorization: `Bearer ${token}`,
                 };
 
-                // Fetch the category data
                 const categoryResponse = await axios.get(`http://127.0.0.1:8000/api/categories/${categorie.id}`, { headers });
 
-                // Check if the category is linked to any movies
                 if (categoryResponse.data.movies && categoryResponse.data.movies.length > 0) {
                     this.errorMessage = 'Cannot delete category: It is linked to one or more movies.';
                     this.showDeleteConfirmation = false;

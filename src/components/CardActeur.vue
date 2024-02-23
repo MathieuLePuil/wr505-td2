@@ -19,7 +19,6 @@ const getActorMovies = async () => {
             },
         });
 
-        // Extract the movies from the actor data
         movies.value = actorResponse.data.movies;
     } catch (error) {
         console.error('Erreur lors de la récupération des films de l\'acteur :', error);
@@ -211,7 +210,6 @@ export default {
 
                 this.$emit('refreshActors');
 
-                // Refresh the list of actors
                 this.getActors();
             } catch (error) {
                 console.error('Erreur lors de la suppression de l\'acteur :', error);

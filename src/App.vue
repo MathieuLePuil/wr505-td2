@@ -70,7 +70,5 @@ const logout = () => {
             </div>
         </nav>
     </header>
-
     <RouterView/>
-
 </template>

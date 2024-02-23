@@ -2,7 +2,7 @@
 import {ref} from 'vue';
 import axios from 'axios';
 
-const username = ref('');
+const username = ref('johndoe');
 const password = ref('');
 const forgotPasswordMessage = ref(false);
 
@@ -59,7 +59,7 @@ const showForgotPasswordMessage = () => {
                 </div>
             </form>
             <div v-if="forgotPasswordMessage" class="mt-2 text-center text-red-500">
-                Votre mot de passe est : password
+                Your password is : password
             </div>
         </div>
     </div>
