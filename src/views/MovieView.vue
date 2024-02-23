@@ -176,7 +176,7 @@ export default {
         },
         async getActors() {
             const token = localStorage.getItem('user-token');
-            const response = await axios.get('http://localhost:8000/api/actors', {
+            const response = await axios.get('http://localhost:8000/api/actors/all', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json',
