@@ -100,7 +100,7 @@ export default {
                     name: categorie.name,
                 };
 
-                await axios.patch(`http://127.0.0.1:8000/api/categories/${categorie.id}`, categoryToUpdate, { headers });
+                await axios.patch(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/categories/${categorie.id}`, categoryToUpdate, { headers });
 
                 this.$emit('refreshCategories');
 
@@ -120,7 +120,7 @@ export default {
                     Authorization: `Bearer ${token}`,
                 };
 
-                const categoryResponse = await axios.get(`http://127.0.0.1:8000/api/categories/${categorie.id}`, { headers });
+                const categoryResponse = await axios.get(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/categories/${categorie.id}`, { headers });
 
                 if (categoryResponse.data.movies && categoryResponse.data.movies.length > 0) {
                     this.errorMessage = 'Cannot delete category: It is linked to one or more movies.';
@@ -128,7 +128,7 @@ export default {
                     return;
                 }
 
-                await axios.delete(`http://127.0.0.1:8000/api/categories/${categorie.id}`, { headers });
+                await axios.delete(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/categories/${categorie.id}`, { headers });
 
                 this.showDeleteConfirmation = false;
 

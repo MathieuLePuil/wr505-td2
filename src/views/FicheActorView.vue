@@ -11,7 +11,7 @@ const userToken = ref(localStorage.getItem('user-token'));
 
 onMounted(async () => {
   const actorResponse = await axios.get(
-      'http://localhost:8000/api/actor/' + id,
+      'https://mmi21b12.mmi-troyes.fr/wr506/public/api/actor/' + id,
       {
         headers: {
           'Accept': 'application/json',

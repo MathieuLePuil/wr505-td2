@@ -8,7 +8,7 @@ const forgotPasswordMessage = ref(false);
 
 const login = async () => {
   try {
-    const response = await axios.post('http://localhost:8000/api/login_check', {
+    const response = await axios.post('https://mmi21b12.mmi-troyes.fr/wr506/public/api/login_check', {
       username: username.value,
       password: password.value
     });

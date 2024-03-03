@@ -77,7 +77,7 @@ export default {
         async getCategories() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get(`http://127.0.0.1:8000/api/categories?page=${this.currentPage}`, {
+                const response = await axios.get(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/categories?page=${this.currentPage}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -92,7 +92,7 @@ export default {
         async searchCategories() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get(`http://127.0.0.1:8000/api/categories?name=${this.searchText}`, {
+                const response = await axios.get(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/categories?name=${this.searchText}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -123,7 +123,7 @@ export default {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 };
-                const response = await axios.post('http://127.0.0.1:8000/api/categories', this.newCategory, { headers });
+                const response = await axios.post('https://mmi21b12.mmi-troyes.fr/wr506/public/api/categories', this.newCategory, { headers });
                 this.categories.push(response.data);
                 this.showAddCategoryForm = false;
                 this.newCategory = { name: '' };

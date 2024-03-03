@@ -12,7 +12,7 @@ const userToken = ref(localStorage.getItem('user-token'));
 
 onMounted(async () => {
     const filmResponse = await axios.get(
-        'http://localhost:8000/api/movie/' + id,
+        'https://mmi21b12.mmi-troyes.fr/wr506/public/api/movie/' + id,
         {
             headers: {
                 'Accept': 'application/json',
@@ -22,7 +22,7 @@ onMounted(async () => {
     )
     film.value = filmResponse.data
 
-    let actorPromises = film.value.actor.map(actor => axios.get('http://localhost:8000' + actor, {
+    let actorPromises = film.value.actor.map(actor => axios.get('https://mmi21b12.mmi-troyes.fr/wr506/public' + actor, {
         headers: {
             'Accept': 'application/json',
             'Authorization': `Bearer ${userToken.value}`
@@ -39,7 +39,7 @@ onMounted(async () => {
     <div v-if="film === ''">Loading...</div>
     <section v-else class="flex mx-10 mt-10">
         <div class="mx-5">
-            <img :src="'http://localhost:8000' + film.imageUrl" alt="Affiche du film">
+            <img :src="'https://mmi21b12.mmi-troyes.fr/wr506/public' + film.imageUrl" alt="Affiche du film">
         </div>
         <div>
             <article class="fiche-article">

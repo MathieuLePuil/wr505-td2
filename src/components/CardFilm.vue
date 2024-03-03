@@ -15,7 +15,7 @@ const actors = ref([]);
 const getActorsInfo = async (actorUrls) => {
     const token = localStorage.getItem('user-token');
     const requests = actorUrls.map(url =>
-        axios.get(`http://127.0.0.1:8000${url}`, {
+        axios.get(`https://mmi21b12.mmi-troyes.fr/wr506/public${url}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/json',
@@ -148,7 +148,7 @@ export default {
         async getMovies() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get('http://127.0.0.1:8000/api/movies', {
+                const response = await axios.get('https://mmi21b12.mmi-troyes.fr/wr506/public/api/movies', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -177,7 +177,7 @@ export default {
                         title: this.editedMovieTitle,
                     };
 
-                    await axios.patch(`http://127.0.0.1:8000/api/movies/${this.selectedMovie.id}`, movieToUpdate, { headers });
+                    await axios.patch(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/movies/${this.selectedMovie.id}`, movieToUpdate, { headers });
 
                     const movieInList = this.movies.find(movie => movie.id === this.selectedMovie.id);
                     if (movieInList) {
@@ -203,7 +203,7 @@ export default {
                     Authorization: `Bearer ${token}`,
                 };
 
-                await axios.delete(`http://127.0.0.1:8000/api/movies/${this.film.id}`, { headers });
+                await axios.delete(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/movies/${this.film.id}`, { headers });
 
                 this.showDeleteConfirmation = false;
 

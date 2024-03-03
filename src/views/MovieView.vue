@@ -120,7 +120,7 @@ export default {
         async getMovies() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get(`http://127.0.0.1:8000/api/movies?page=${this.currentPage}`, {
+                const response = await axios.get(`https://wr506.mathieulp.fr/api/movies?page=${this.currentPage}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -152,7 +152,7 @@ export default {
             this.isSearching = true;
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get(`http://127.0.0.1:8000/api/movies?title=${this.searchText}`, {
+                const response = await axios.get(`https://wr506.mathieulp.fr/api/movies?title=${this.searchText}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -166,7 +166,7 @@ export default {
         },
         async getCategories() {
             const token = localStorage.getItem('user-token');
-            const response = await axios.get('http://localhost:8000/api/categories', {
+            const response = await axios.get('https://mmi21b12.mmi-troyes.fr/wr506/public/api/categories', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json',
@@ -176,7 +176,7 @@ export default {
         },
         async getActors() {
             const token = localStorage.getItem('user-token');
-            const response = await axios.get('http://localhost:8000/api/actors/all', {
+            const response = await axios.get('https://mmi21b12.mmi-troyes.fr/wr506/public/api/actors/all', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json',
@@ -194,7 +194,7 @@ export default {
                 const actorPaths = this.selectedActors.map(id => `/api/actor/${id}`);
                 const categoryPath = `/api/categories/${this.newMovie.category_id}`;
 
-                const response = await fetch('http://127.0.0.1:8000/api/movies', {
+                const response = await fetch('https://wr506.mathieulp.fr/api/movies', {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -244,7 +244,7 @@ export default {
                 const token = localStorage.getItem("user-token");
                 const headers = new Headers();
                 headers.append('Authorization', `Bearer ${token}`);
-                const response = await fetch("http://localhost:8000/api/media_objects", {
+                const response = await fetch("https://mmi21b12.mmi-troyes.fr/wr506/public/api/media_objects", {
                     method: 'POST',
                     headers: headers,
                     body: formData
