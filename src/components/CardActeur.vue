@@ -12,7 +12,7 @@ const getActorMovies = async () => {
     const token = localStorage.getItem('user-token');
     try {
         // Fetch the actor data
-        const actorResponse = await axios.get(`http://127.0.0.1:8000/api/actor/${actor.id}`, {
+        const actorResponse = await axios.get(`https://mmi21b12.sae105.ovh/api/actor/${actor.id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/json',
@@ -141,7 +141,7 @@ export default {
         async getActors() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get('http://127.0.0.1:8000/api/actors', {
+                const response = await axios.get('https://mmi21b12.sae105.ovh/api/actors', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -172,14 +172,14 @@ export default {
                         nationality: this.selectedActor.nationality
                     };
 
-                    await axios.patch(`http://127.0.0.1:8000/api/actors/${this.selectedActor.id}`, actorToUpdate, { headers });
+                    await axios.patch(`https://mmi21b12.sae105.ovh/api/actors/${this.selectedActor.id}`, actorToUpdate, { headers });
 
                     const actorInList = this.actors.find(actor => actor.id === this.selectedActor.id);
                     if (actorInList) {
                         Object.assign(actorInList, this.selectedActor);
                     }
 
-                    this.selectedActorId = null;
+                    location.reload();
                 } catch (error) {
                     console.error('Erreur lors de la mise à jour de l\'acteur :', error);
                 }
@@ -204,7 +204,7 @@ export default {
                     Authorization: `Bearer ${token}`,
                 };
 
-                await axios.delete(`http://127.0.0.1:8000/api/actors/${this.selectedActor.id}`, { headers });
+                await axios.delete(`https://mmi21b12.sae105.ovh/api/actors/${this.selectedActor.id}`, { headers });
 
                 this.showDeleteConfirmation = false;
 
