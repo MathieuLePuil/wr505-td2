@@ -16,7 +16,7 @@ let acteurs = ref('')
 
 onMounted(async () => {
   const filmResponse = await axios.get(
-      'http://localhost:8000/api/movies?online=true&page=1',
+      'https://mmi21b12.sae105.ovh/api/movies?online=true&page=1',
       {
         headers: {
           'Accept': 'application/json',
@@ -27,7 +27,7 @@ onMounted(async () => {
   films.value = filmResponse.data
 
   const acteurResponse = await axios.get(
-      'http://localhost:8000/api/actors?page=1',
+      'https://mmi21b12.sae105.ovh/api/actors?page=1',
       {
         headers: {
           'Accept': 'application/json'
