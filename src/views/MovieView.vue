@@ -120,7 +120,7 @@ export default {
         async getMovies() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get(`https://wr506.mathieulp.fr/api/movies?page=${this.currentPage}`, {
+                const response = await axios.get(`https://mmi21b12.sae105.ovh/api/movies?page=${this.currentPage}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -152,7 +152,7 @@ export default {
             this.isSearching = true;
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get(`https://wr506.mathieulp.fr/api/movies?title=${this.searchText}`, {
+                const response = await axios.get(`https://mmi21b12.sae105.ovh/api/movies?title=${this.searchText}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -194,7 +194,7 @@ export default {
                 const actorPaths = this.selectedActors.map(id => `/api/actor/${id}`);
                 const categoryPath = `/api/categories/${this.newMovie.category_id}`;
 
-                const response = await fetch('https://wr506.mathieulp.fr/api/movies', {
+                const response = await fetch('https://mmi21b12.sae105.ovh/api/movies', {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,

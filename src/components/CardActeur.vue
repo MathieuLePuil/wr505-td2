@@ -179,7 +179,7 @@ export default {
                         Object.assign(actorInList, this.selectedActor);
                     }
 
-                    this.selectedActorId = null;
+                    location.reload();
                 } catch (error) {
                     console.error('Erreur lors de la mise à jour de l\'acteur :', error);
                 }

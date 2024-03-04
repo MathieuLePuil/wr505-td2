@@ -41,7 +41,7 @@ onMounted(() => {
 <template>
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
         <div class="flex flex-col space-y-1.5 p-6">
-            <img :src="'http://localhost:8000' + movie.imageUrl" alt="Affiche du film" class="mb-3">
+            <img :src="'https://mmi21b12.sae105.ovh' + movie.imageUrl" alt="Affiche du film" class="mb-3">
             <h3 class="text-2xl font-semibold leading-none tracking-tight">{{ movie.title }}</h3>
             <p class="text-sm text-muted-foreground">{{ movie.description }}</p>
         </div>
@@ -59,11 +59,11 @@ onMounted(() => {
             <routerLink :to="'/fiche-movie/'+movie.id"  class="">
                 <div class="flex justify-center items-center h-8 mt-4 cursor-pointer bg-gray-600 text-white rounded-md hover:bg-gray-800">See more</div>
             </routerLink>
-            <a @click="toggleDetails(movie.id)" class="cursor-pointer flex justify-center items-center h-8 mt-4 bg-gray-300 text-black rounded-md hover:bg-gray-400">Edit</a>
+            <a @click="toggleDetails(movie)" class="cursor-pointer flex justify-center items-center h-8 mt-4 bg-gray-300 text-black rounded-md hover:bg-gray-400">Edit</a>
             <a @click="showDeleteConfirmation = true" class="cursor-pointer flex justify-center items-center h-8 mt-4 bg-red-500 text-white rounded-md hover:bg-red-700">Delete</a>
         </div>
     </div>
-    <div :class="[{ 'modal': selectedMovieId, 'scale-0': !selectedMovieId }]">
+    <div v-if="showModal" class="modal">
         <div class="modal-content" v-if="selectedMovie">
             <h2 class="text-xl font-bold mb-2">{{ selectedMovie.title }}</h2>
             <form @submit.prevent="updateMovie">
@@ -131,6 +131,7 @@ export default {
         return {
             movies: [],
             selectedMovieId: null,
+            showModal: false,
             selectedMovie: null,
             editedMovieTitle:'',
             showDeleteConfirmation: false,
@@ -140,10 +141,10 @@ export default {
         this.getMovies();
     },
     methods: {
-        toggleDetails(movieId) {
-            this.selectedMovieId = this.selectedMovieId === movieId ? null : movieId;
-            this.selectedMovie = this.movies.find(movie => movie.id === this.selectedMovieId);
-            this.editedMovieTitle = this.selectedMovie ? this.selectedMovie.title : '';
+        toggleDetails(movie) {
+            this.showModal = !this.showModal;
+            this.selectedMovie = movie;
+            this.editedMovieTitle = movie.title;
         },
         async getMovies() {
             try {
@@ -185,8 +186,9 @@ export default {
                         movieInList.title = this.editedMovieTitle;
                     }
 
-                    this.selectedMovieId = null;
-                    this.$emit('refreshMovies');
+                    this.getMovies();
+                    this.showModal = false;
+                    location.reload();
                 } catch (error) {
                     console.error('Erreur lors de la mise à jour du film :', error);
                 }
@@ -228,6 +230,8 @@ export default {
     align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s ease;
+    scale: 100%;
+    z-index: 100;
 }
 
 .modal-content {
