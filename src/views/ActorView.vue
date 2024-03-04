@@ -104,7 +104,7 @@ export default {
         async getActors() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/actors?page=${this.currentPage}`, {
+                const response = await axios.get(`https://mmi21b12.sae105.ovh/api/actors?page=${this.currentPage}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -119,7 +119,7 @@ export default {
         async getMovies() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get('https://mmi21b12.mmi-troyes.fr/wr506/public/api/movies', {
+                const response = await axios.get('https://mmi21b12.sae105.ovh/api/movies', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -140,7 +140,7 @@ export default {
                 };
                 const moviePaths = this.newActor.movies.map(id => `/api/movie/${id}`);
                 const actorData = { ...this.newActor, movies: moviePaths };
-                const response = await axios.post('https://mmi21b12.mmi-troyes.fr/wr506/public/api/actors', actorData, { headers });
+                const response = await axios.post('https://mmi21b12.sae105.ovh/api/actors', actorData, { headers });
                 this.actors.push(response.data);
                 this.showAddActorForm = false;
                 this.newActor = { firstname: '', lastname: '', nationality: '', movies: [] };
@@ -174,7 +174,7 @@ export default {
                     };
                     const updatedActor = { lastName: this.editedActorName };
 
-                    await axios.patch(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/actors/${this.selectedActor.id}`, updatedActor, { headers });
+                    await axios.patch(`https://mmi21b12.sae105.ovh/api/actors/${this.selectedActor.id}`, updatedActor, { headers });
 
                     const actorToUpdate = this.actors.find(actor => actor.id === this.selectedActor.id);
                     if (actorToUpdate) {
@@ -191,7 +191,7 @@ export default {
         async searchActors() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/actors?lastname=${this.searchText}`, {
+                const response = await axios.get(`https://mmi21b12.sae105.ovh/api/actors?lastname=${this.searchText}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',

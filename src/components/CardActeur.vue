@@ -12,7 +12,7 @@ const getActorMovies = async () => {
     const token = localStorage.getItem('user-token');
     try {
         // Fetch the actor data
-        const actorResponse = await axios.get(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/actor/${actor.id}`, {
+        const actorResponse = await axios.get(`https://mmi21b12.sae105.ovh/api/actor/${actor.id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/json',
@@ -141,7 +141,7 @@ export default {
         async getActors() {
             try {
                 const token = localStorage.getItem('user-token');
-                const response = await axios.get('https://mmi21b12.mmi-troyes.fr/wr506/public/api/actors', {
+                const response = await axios.get('https://mmi21b12.sae105.ovh/api/actors', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: 'application/json',
@@ -172,7 +172,7 @@ export default {
                         nationality: this.selectedActor.nationality
                     };
 
-                    await axios.patch(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/actors/${this.selectedActor.id}`, actorToUpdate, { headers });
+                    await axios.patch(`https://mmi21b12.sae105.ovh/api/actors/${this.selectedActor.id}`, actorToUpdate, { headers });
 
                     const actorInList = this.actors.find(actor => actor.id === this.selectedActor.id);
                     if (actorInList) {
@@ -204,7 +204,7 @@ export default {
                     Authorization: `Bearer ${token}`,
                 };
 
-                await axios.delete(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/actors/${this.selectedActor.id}`, { headers });
+                await axios.delete(`https://mmi21b12.sae105.ovh/api/actors/${this.selectedActor.id}`, { headers });
 
                 this.showDeleteConfirmation = false;
 

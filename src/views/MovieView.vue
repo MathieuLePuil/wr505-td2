@@ -166,7 +166,7 @@ export default {
         },
         async getCategories() {
             const token = localStorage.getItem('user-token');
-            const response = await axios.get('https://mmi21b12.mmi-troyes.fr/wr506/public/api/categories', {
+            const response = await axios.get('https://mmi21b12.sae105.ovh/api/categories', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json',
@@ -176,7 +176,7 @@ export default {
         },
         async getActors() {
             const token = localStorage.getItem('user-token');
-            const response = await axios.get('https://mmi21b12.mmi-troyes.fr/wr506/public/api/actors/all', {
+            const response = await axios.get('https://mmi21b12.sae105.ovh/api/actors/all', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json',
@@ -244,7 +244,7 @@ export default {
                 const token = localStorage.getItem("user-token");
                 const headers = new Headers();
                 headers.append('Authorization', `Bearer ${token}`);
-                const response = await fetch("https://mmi21b12.mmi-troyes.fr/wr506/public/api/media_objects", {
+                const response = await fetch("https://mmi21b12.sae105.ovh/api/media_objects", {
                     method: 'POST',
                     headers: headers,
                     body: formData

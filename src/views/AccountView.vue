@@ -10,7 +10,7 @@ const lastname = ref('');
 const showEditForm = ref(false);
 
 const fetchUserDetails = async () => {
-    const response = await axios.get(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/users?username=${username.value}`);
+    const response = await axios.get(`https://mmi21b12.sae105.ovh/api/users?username=${username.value}`);
     const user = response.data['hydra:member'][0];
     userid.value = user.id;
     username.value = user.username;
@@ -31,7 +31,7 @@ const updateUserDetails = async () => {
         firstname: firstname.value,
         lastname: lastname.value,
     };
-    await axios.patch(`https://mmi21b12.mmi-troyes.fr/wr506/public/api/users/${userid.value}`, userToUpdate, { headers });
+    await axios.patch(`https://mmi21b12.sae105.ovh/api/users/${userid.value}`, userToUpdate, { headers });
     showEditForm.value = false;
 };
 
